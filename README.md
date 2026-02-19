@@ -1,8 +1,18 @@
 # GraphSim
 
-[![Build Status](https://travis-ci.org/marcusps/GraphSim.svg?branch=master)](https://travis-ci.org/marcusps/GraphSim)
+This is a modified repository of Simon Anders' library to simulate an important class of quantum circuits which supports pybind11.
 
-This is a git repository for Simon Anders' library to simulate an important class of quantum circuits.
+## Installation
+
+To install, run
+```
+uv build
+```
+
+then navigate to the `dist/` folder and pip install the wheel.
+```
+uv pip install graphsim-*.*.*-cp312-cp312-linux_x86_64.whl
+```
 
 This code is not actively supported or maintained, but pull requests for minor bug fixes will be accepted.
 
