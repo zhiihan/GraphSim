@@ -8,8 +8,21 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(graphsim, m) {
+PYBIND11_MODULE(_core, m) {
     m.doc() = "Pybind11 bindings for GraphRegister";
+
+    py::class_<LocCliffOp>(m, "LocCliffOp")
+        .def_readonly("op", &LocCliffOp::op)
+        .def("__repr__", [](const LocCliffOp &lco) {
+            return "<LocCliffOp op=" + std::to_string(lco.op) + ">";
+        });
+
+    // Expose LocCliffOp constants (structs, not enum)
+    m.attr("lco_X") = py::cast(lco_X);
+    m.attr("lco_Y") = py::cast(lco_Y);
+    m.attr("lco_Z") = py::cast(lco_Z);
+    m.attr("lco_H") = py::cast(lco_H);
+    m.attr("lco_S") = py::cast(lco_S);
 
     py::class_<GraphRegister>(m, "GraphRegister")
         .def(py::init<VertexIndex, int>(),
@@ -22,22 +35,20 @@ PYBIND11_MODULE(graphsim, m) {
         // .def("toggle_edge", &GraphRegister::toggle_edge)
 
         // Quantum gates
+        .def("hadamard", &GraphRegister::hadamard)
+        .def("phaserot", &GraphRegister::phaserot)
+        .def("bitflip", &GraphRegister::bitflip)
+        .def("phaseflip", &GraphRegister::phaseflip)
         .def("cphase", &GraphRegister::cphase)
         .def("cnot", &GraphRegister::cnot)
 
-        // Measurements
         .def("measure",
-            [](GraphRegister &gr,
-               VertexIndex v,
-               LocCliffOp basis,
-               int force) {
-                bool determined = false;
-                int result = gr.measure(v, basis, &determined, force);
-                return py::make_tuple(result, determined);
+            [](GraphRegister &gr, VertexIndex v) {
+                // call C++ measure with defaults: basis = lco_Z, determined = nullptr, force = -1
+                int result = gr.measure(v, lco_Z, nullptr, -1);
+                return result;
             },
-            py::arg("vertex"),
-            py::arg("basis"),
-            py::arg("force") = -1)
+            py::arg("vertex"))
 
         // Neighborhood inversion
         .def("invert_neighborhood",

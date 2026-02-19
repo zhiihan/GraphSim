@@ -2,26 +2,20 @@ import graphsim
 import random
 
 # we need a quantum register with 7 qubits:
-gr = graphsim.GraphRegister (8)
+gr = graphsim.GraphRegister(5)
 
-gr.hadamard (4)
-gr.hadamard (5)
-gr.hadamard (6)
-gr.cnot (6, 3)
-gr.cnot (6, 1)
-gr.cnot (6, 0)
-gr.cnot (5, 3)
-gr.cnot (5, 2)
-gr.cnot (5, 0)
-gr.cnot (4, 3)
-gr.cnot (4, 2)
-gr.cnot (4, 1)
+gr.hadamard(0)
+gr.hadamard(1)
+gr.hadamard(2)
+gr.hadamard(3)
+gr.cphase(0, 1)
+gr.cphase(0, 2)
+gr.cphase(0, 3)
+gr.cphase(0, 4)
 
-for i in range (7):
-   gr.cnot (i, 7)
+print(gr.adj_list_str(), gr.stabilizer_str())
 
-print (gr.measure (7))
 
-gr.print_adj_list ()
-gr.print_stabilizer ()
+
+print(gr.measure(0), gr.measure(1), gr.measure(2), gr.measure(3), gr.measure(4))
    

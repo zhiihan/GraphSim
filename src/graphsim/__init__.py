@@ -1,2 +1,2 @@
-from graphsim import GraphRegister
+from graphsim._core import GraphRegister
 

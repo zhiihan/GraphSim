@@ -4,6 +4,8 @@ project(${SKBUILD_PROJECT_NAME} LANGUAGES CXX)
 set(PYBIND11_FINDPYTHON ON)
 find_package(pybind11 CONFIG REQUIRED)
 
+include_directories(src)
+
 # Add all source files that contain the method implementations
 set(SOURCES
     src/bindings.cpp
@@ -13,6 +15,6 @@ set(SOURCES
 )
 
 # Build the Python module
-pybind11_add_module(graphsim MODULE ${SOURCES})
+pybind11_add_module(_core MODULE ${SOURCES})
 
-install(TARGETS graphsim DESTINATION ${SKBUILD_PROJECT_NAME})
+install(TARGETS _core DESTINATION ${SKBUILD_PROJECT_NAME})
