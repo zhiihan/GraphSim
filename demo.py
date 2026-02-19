@@ -17,10 +17,10 @@ gr.cnot (4, 3)
 gr.cnot (4, 2)
 gr.cnot (4, 1)
 
-for i in xrange (7):
+for i in range (7):
    gr.cnot (i, 7)
 
-print gr.measure (7)
+print (gr.measure (7))
 
 gr.print_adj_list ()
 gr.print_stabilizer ()
