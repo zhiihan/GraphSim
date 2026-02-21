@@ -1,0 +1,24 @@
+name: Build Wheels
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-wheels:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: [3.10, 3.11, 3.12]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install cibuildwheel
+      - run: cibuildwheel --platform ${{ matrix.os }} --output-dir wheelhouse
+      - uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: wheelhouse/*

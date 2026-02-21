@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(${SKBUILD_PROJECT_NAME} LANGUAGES CXX)
+project("graphsim" LANGUAGES CXX)
 
 set(PYBIND11_FINDPYTHON ON)
 find_package(pybind11 CONFIG REQUIRED)
@@ -17,4 +17,4 @@ set(SOURCES
 # Build the Python module
 pybind11_add_module(_core MODULE ${SOURCES})
 
-install(TARGETS _core DESTINATION ${SKBUILD_PROJECT_NAME})
+install(TARGETS _core DESTINATION "graphsim")

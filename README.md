@@ -11,7 +11,7 @@ uv build
 
 then navigate to the `dist/` folder and pip install the wheel.
 ```
-uv pip install graphsim-*.*.*-cp312-cp312-linux_x86_64.whl
+uv pip install dist/*.whl
 ```
 
 This code is not actively supported or maintained, but pull requests for minor bug fixes will be accepted.
