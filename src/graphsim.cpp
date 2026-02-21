@@ -5,6 +5,7 @@
 #include <ctime>
 #include <random>
 #include <utility>
+#include <algorithm>
 
 //! Random coin toss. Change here to insert your favorite RNG.
 int bool_rand() {
@@ -66,7 +67,14 @@ Stabilizer &GraphRegister::get_full_stabilizer(void) const {
     for (VertexIterConst i = vertices.begin(); i != vertices.end(); i++) {
         all_qubits.insert(i - vertices.begin());
     }
-    Stabilizer *s = new Stabilizer(*this, all_qubits);
+    
+    // Sort for deterministic order
+    vector<VertexIndex> sorted_qubits(all_qubits.begin(), all_qubits.end());
+    sort(sorted_qubits.begin(), sorted_qubits.end());
+    
+    // Need to convert back to unordered_set or modify Stabilizer constructor
+    unordered_set<VertexIndex> ordered_qubits(sorted_qubits.begin(), sorted_qubits.end());
+    Stabilizer *s = new Stabilizer(*this, ordered_qubits);
     return *s;
 }
 

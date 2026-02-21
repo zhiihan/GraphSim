@@ -11,6 +11,8 @@ def test_stabilizers():
     gr.CZ(0, 1)
     gr.CZ(0, 2)
 
+    print(gr.print_stabilizers())
+
     assert gr.stabilizer_list() == ["+XZZ", "+ZXI", "+ZIX"]
 
 
