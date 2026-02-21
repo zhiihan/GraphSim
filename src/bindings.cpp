@@ -54,24 +54,12 @@ PYBIND11_MODULE(_core, m) {
         .def("invert_neighborhood",
              &GraphRegister::invert_neighborhood)
 
-        // Pretty printing: return adjacency list as string
-        .def("adj_list_str",
-            [](const GraphRegister &gr) {
-                std::ostringstream oss;
-                gr.print_adj_list(oss);
-                return oss.str();
-            })
+        // Pybindings for exporting the data
+        .def("stabilizer_list", &GraphRegister::stabilizer_list)
 
-        // Pretty printing: stabilizer
-        .def("stabilizer_str",
-            [](const GraphRegister &gr) {
-                std::ostringstream oss;
-                gr.print_stabilizer(oss);
-                return oss.str();
-            })
+        .def("adjacency_matrix", &GraphRegister::adjacency_matrix)
 
-        .def("adjacency_matrix_numpy", [](const GraphRegister &gr) {
-            auto mat = gr.adjacency_matrix();
-            return py::cast(mat);
-        });
+        .def("adjacency_list", &GraphRegister::adjacency_list)
+    
+        .def("vop_list", &GraphRegister::vop_list);
 }

@@ -14,8 +14,10 @@ gr.cphase(0, 2)
 gr.cphase(0, 3)
 gr.cphase(0, 4)
 
-print(gr.adj_list_str(), gr.stabilizer_str())
-print(gr.adjacency_matrix_numpy())
+print(gr.adjacency_matrix())
+print(gr.adjacency_list())
+print(gr.vop_list())
+print(gr.stabilizer_str())
 
 gr.hadamard(0)
 

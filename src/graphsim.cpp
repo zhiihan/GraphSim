@@ -105,6 +105,7 @@ void GraphRegister::print_stabilizer (ostream &os) const
    get_full_stabilizer().print (os);
 }
 
+// Pybindings for exporting the data
 vector<vector<unsigned long>> GraphRegister::adjacency_matrix() const {
    const size_t n = vertices.size();
 
@@ -120,6 +121,50 @@ vector<vector<unsigned long>> GraphRegister::adjacency_matrix() const {
    return arr;
 }
 
+// Pybindings for exporting the data
+vector<unordered_set<unsigned long>> GraphRegister::adjacency_list() const {
+   const size_t n = vertices.size();
+
+   vector<unordered_set<unsigned long>> adj_list(n);
+   
+   for (VertexIndex i = 0; i < vertices.size(); i++) {
+      for (VtxIdxIterConst j = vertices[i].neighbors.begin();
+            j != vertices[i].neighbors.end(); ++j) {
+            adj_list[i].insert(*j);
+      }
+   }
+   return adj_list;
+}
+
+// Pybindings for exporting the data
+vector<string> GraphRegister::vop_list() const {
+   const size_t n = vertices.size();
+
+   vector<string> vop_list(n);
+   
+   for (VertexIndex i = 0; i < vertices.size(); i++) {
+      vop_list[i] = vertices[i].byprod.get_name();
+   }
+   return vop_list;
+}
+
+// Pybindings for exporting the data
+vector<string> GraphRegister::stabilizer_list() const
+{
+   Stabilizer full_stabilizer = get_full_stabilizer();
+
+   const size_t n = vertices.size();
+   vector<string> stab_list(n);
+
+   for (unsigned i = 0; i < n; i++) {
+      stab_list[i] += full_stabilizer.rowsigns[i].get_name();
+      for (unsigned j = 0; j < n; j++) {
+         stab_list[i] += full_stabilizer.paulis[i][j].get_name().substr(0,1);
+      }
+   }
+
+   return stab_list;
+}
 
 /*! Use the cphase look-up table. This is called by cphase after VOps that do not
 commute with the cphase gate have been removed as far as possible. */
