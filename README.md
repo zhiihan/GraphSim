@@ -4,6 +4,16 @@ This is a modified repository of Simon Anders' library to simulate an important 
 
 ## Installation
 
+### PyPI
+
+```
+pip install graphstatesim
+```
+
+Then in python, `import graphsim`.
+
+### Building locally
+
 To install, run
 ```
 uv build
