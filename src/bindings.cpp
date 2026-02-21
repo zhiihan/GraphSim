@@ -45,7 +45,7 @@ PYBIND11_MODULE(_core, m) {
         .def("measure",
             [](GraphRegister &gr, VertexIndex v) {
                 // call C++ measure with defaults: basis = lco_Z, determined = nullptr, force = -1
-                int result = gr.measure(v, lco_Z, nullptr, -1);
+                int result = gr.measure(v, lco_Z, NULL, -1);
                 return result;
             },
             py::arg("vertex"))

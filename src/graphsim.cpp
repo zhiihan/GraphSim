@@ -4,11 +4,16 @@
 
 #include <utility>
 #include <ctime>
+#include <random>
 
 //!Random coin toss. Change here to insert your favorite RNG.
-int bool_rand (void) {
-  return random () > RAND_MAX/2;
+int bool_rand() {
+    static mt19937 gen(random_device{}());
+    static bernoulli_distribution dist(0.5);
+    return dist(gen);
 }
+
+
 
 
 //! Instantiate a quantum register with 'numQubits' qubits, initally all in state |0>. 
