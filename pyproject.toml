@@ -1,5 +1,5 @@
 [project]
-name = "graph-state-sim"
+name = "graphstatesim"
 version = "0.2.1"
 description = "A fast stabilizer simulator using a graph state representation."
 readme = "README.md"
@@ -23,3 +23,10 @@ dev = [
     "pytest>=9.0.2",
     "ruff>=0.15.2",
 ]
+
+[tool.cibuildwheel]
+build-frontend = "build[uv]"
+
+test-requires = "pytest"
+# Run pytest on your tests directory
+test-command = "pytest {project}/tests"
