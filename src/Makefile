@@ -61,6 +61,10 @@ ifeq (${WITH_MATHLINK}, yes)
 endif
 
 
+# Python include path and library from current venv
+PYTHON_INCLUDE = $(shell python3 -c "from sysconfig import get_paths as p; print(p()['include'])")
+PYTHON_LIB = $(shell python3 -c "from sysconfig import get_config_var as c; print(c('LIBDIR'))")
+PYTHON_SO = $(shell python3 -c "import sysconfig; print(sysconfig.get_config_var('LDLIBRARY'))")
  
 all: gs pywrapper doc docpy
 
@@ -102,7 +106,7 @@ _graphsim.so: graphsim.o graphsim_wrap.o loccliff.o stabilizer.o
 	stabilizer.o ${MLLIB} -o _graphsim.so
  
 graphsim_wrap.o: graphsim_wrap.cxx
-	${CXX} ${CFLAGS} ${NOLINK} graphsim_wrap.cxx -I/usr/include/python2.7/
+	${CXX} ${CFLAGS} ${NOLINK} graphsim_wrap.cxx -I$(PYTHON_INCLUDE)
 
 loccliff.h: multtbl.tbl
 
@@ -123,7 +127,7 @@ doc/timestamp.dummy: graphsim.h loccliff.h stabilizer.h
 chp.py: _chp.so
 
 chp_wrap.o: CHP/chp_wrap.c
-	${CC} ${CFLAGS} ${NOLINK} CHP/chp_wrap.c -I/usr/include/python2.7/
+	${CC} ${CFLAGS} ${NOLINK} CHP/chp_wrap.c -I$(PYTHON_INCLUDE)
 
 chp_wrap.c: CHP/chp.i CHP/chp.h
 	${SWIG} -python CHP/chp.i

@@ -68,5 +68,10 @@ PYBIND11_MODULE(_core, m) {
                 std::ostringstream oss;
                 gr.print_stabilizer(oss);
                 return oss.str();
-            });
+            })
+
+        .def("adjacency_matrix_numpy", [](const GraphRegister &gr) {
+            auto mat = gr.adjacency_matrix();
+            return py::cast(mat);
+        });
 }

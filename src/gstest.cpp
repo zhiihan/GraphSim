@@ -5,7 +5,7 @@
 
 using namespace std;
 
-const int nbr_of_qubits = 200;
+const int nbr_of_qubits = 10;
 
 int main (int, char**)
 {
@@ -37,4 +37,14 @@ int main (int, char**)
    }
    cout << endl;
    gr.print_adj_list ();
+
+   vector<vector<long unsigned int>> matrix = gr.adjacency_matrix();
+
+    // Nested loop to print each element
+    for (size_t i = 0; i < matrix.size(); i++) {
+        for (size_t j = 0; j < matrix[i].size(); j++) {
+            cout << matrix[i][j] << " ";
+        }
+        cout << endl;  // new line after each row
+   }
 }

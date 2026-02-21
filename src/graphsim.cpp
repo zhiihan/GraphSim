@@ -100,6 +100,22 @@ void GraphRegister::print_stabilizer (ostream &os) const
    get_full_stabilizer().print (os);
 }
 
+vector<vector<unsigned long>> GraphRegister::adjacency_matrix() const {
+   const size_t n = vertices.size();
+
+   vector<vector<unsigned long>> arr(n, vector<unsigned long>(n, 0));
+   for (VertexIndex i = 0; i < vertices.size(); i++) {
+      for (VtxIdxIterConst it = vertices[i].neighbors.begin();
+            it != vertices[i].neighbors.end(); ++it) {
+         VertexIndex j = *it;       // dereference iterator
+         arr[i][j] = 1;
+         arr[j][i] = 1;
+      }
+   }
+   return arr;
+}
+
+
 /*! Use the cphase look-up table. This is called by cphase after VOps that do not
 commute with the cphase gate have been removed as far as possible. */
 void GraphRegister::cphase_with_table (VertexIndex v1, VertexIndex v2)
