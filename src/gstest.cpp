@@ -8,50 +8,50 @@ using namespace std;
 const int nbr_of_qubits = 10;
 
 int main(int, char **) {
-  // srandom (time (NULL));
-  GraphRegister gr(nbr_of_qubits);
+    // srandom (time (NULL));
+    GraphRegister gr(nbr_of_qubits);
 
-  for (int iter = 0; iter < 1500; iter++) {
-    VertexIndex qubit = random() / (RAND_MAX / nbr_of_qubits);
-    int what = random() / (RAND_MAX / 15);
-    switch (what) {
-    case 0:
-      gr.hadamard(qubit);
-      break;
-    case 1:
-      gr.local_op(qubit, lco_S);
-      break;
-    case 2:
-      gr.local_op(qubit, lco_Z);
-      break;
-    case 3:
-      gr.local_op(qubit, lco_X);
-      break;
-    default:
-      VertexIndex qubit2 = random() / (RAND_MAX / nbr_of_qubits);
-      if (qubit2 == qubit) {
-        continue;
-      }
-      if (random() > RAND_MAX / 2) {
-        gr.cphase(qubit, qubit2);
-      } else {
-        gr.cnot(qubit, qubit2);
-      }
+    for (int iter = 0; iter < 1500; iter++) {
+        VertexIndex qubit = random() / (RAND_MAX / nbr_of_qubits);
+        int what = random() / (RAND_MAX / 15);
+        switch (what) {
+        case 0:
+            gr.hadamard(qubit);
+            break;
+        case 1:
+            gr.local_op(qubit, lco_S);
+            break;
+        case 2:
+            gr.local_op(qubit, lco_Z);
+            break;
+        case 3:
+            gr.local_op(qubit, lco_X);
+            break;
+        default:
+            VertexIndex qubit2 = random() / (RAND_MAX / nbr_of_qubits);
+            if (qubit2 == qubit) {
+                continue;
+            }
+            if (random() > RAND_MAX / 2) {
+                gr.cphase(qubit, qubit2);
+            } else {
+                gr.cnot(qubit, qubit2);
+            }
+        }
+        if (iter % 100 == 0) {
+            cout << iter << endl;
+        }
     }
-    if (iter % 100 == 0) {
-      cout << iter << endl;
-    }
-  }
-  cout << endl;
-  gr.print_adj_list();
+    cout << endl;
+    gr.print_adj_list();
 
-  vector<vector<long unsigned int>> matrix = gr.adjacency_matrix();
+    vector<vector<long unsigned int>> matrix = gr.adjacency_matrix();
 
-  // Nested loop to print each element
-  for (size_t i = 0; i < matrix.size(); i++) {
-    for (size_t j = 0; j < matrix[i].size(); j++) {
-      cout << matrix[i][j] << " ";
+    // Nested loop to print each element
+    for (size_t i = 0; i < matrix.size(); i++) {
+        for (size_t j = 0; j < matrix[i].size(); j++) {
+            cout << matrix[i][j] << " ";
+        }
+        cout << endl; // new line after each row
     }
-    cout << endl; // new line after each row
-  }
 }

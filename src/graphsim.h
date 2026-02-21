@@ -92,24 +92,24 @@ typedef unsigned long VertexIndex;
 /*! A GraphRegister object maintains a list of its vertices (qubits), each
 described by an object of the class QubitVertex described here.*/
 struct QubitVertex {
-  /*!byprod is the vertex operator (VOp) associated with the qubit (the name
-  stems from the term 'byproduct operator' used for the similar concept in
-  the one-way quantum computer.*/
-  LocCliffOp byprod;
-  /*! neigbors is the adjacency list for this vertex */
-  unordered_set<VertexIndex> neighbors;
-  /*! Upon construction, a qubit vertex is initialised with the Hadamard
-  operation as VOp, and with wmpty neighbor list. This makes it represent
-  a |0>. */
-  QubitVertex(void) : byprod(lco_H){};
+    /*!byprod is the vertex operator (VOp) associated with the qubit (the name
+    stems from the term 'byproduct operator' used for the similar concept in
+    the one-way quantum computer.*/
+    LocCliffOp byprod;
+    /*! neigbors is the adjacency list for this vertex */
+    unordered_set<VertexIndex> neighbors;
+    /*! Upon construction, a qubit vertex is initialised with the Hadamard
+    operation as VOp, and with wmpty neighbor list. This makes it represent
+    a |0>. */
+    QubitVertex(void) : byprod(lco_H){};
 };
 
 #ifndef SWIG
 /*! This structure is only for internal use for the cphase functions. */
 struct ConnectionInfo {
-  bool wasEdge;
-  bool non1;
-  bool non2;
+    bool wasEdge;
+    bool non1;
+    bool non2;
 };
 #endif
 
@@ -119,44 +119,44 @@ qubits that can be entangled with each other. It offers functions to initialize
 the register, let gates operate on the qubits, do measurements and print out the
 state. */
 class GraphRegister {
-public:
-  /*! This vector stores all the qubits, represented as QubitVertex objects. The
-  index of the vector is usually taken as of type VertexIndex. */
-  vector<QubitVertex> vertices;
-  GraphRegister(VertexIndex numQubits, int randomize = -1);
-  GraphRegister(GraphRegister &gr);
-  ~GraphRegister(){};
-  void local_op(VertexIndex v, LocCliffOp o);
-  void hadamard(VertexIndex v);
-  void phaserot(VertexIndex v);
-  void bitflip(VertexIndex v);
-  void phaseflip(VertexIndex v);
-  void cphase(VertexIndex v1, VertexIndex v2);
-  void cnot(VertexIndex vc, VertexIndex vt);
-  int measure(VertexIndex v, LocCliffOp basis = lco_Z, bool *determined = NULL,
-              int force = -1);
-  Stabilizer &get_full_stabilizer(void) const;
-  void invert_neighborhood(VertexIndex v);
-  void print_adj_list(ostream &os = cout) const;
-  void print_adj_list_line(ostream &os, VertexIndex i) const;
-  void print_stabilizer(ostream &os = cout) const;
-  vector<vector<unsigned long>> adjacency_matrix() const;
-  vector<unordered_set<unsigned long>> adjacency_list() const;
-  vector<string> vop_list() const;
-  vector<string> stabilizer_list() const;
+  public:
+    /*! This vector stores all the qubits, represented as QubitVertex objects.
+    The index of the vector is usually taken as of type VertexIndex. */
+    vector<QubitVertex> vertices;
+    GraphRegister(VertexIndex numQubits, int randomize = -1);
+    GraphRegister(GraphRegister &gr);
+    ~GraphRegister(){};
+    void local_op(VertexIndex v, LocCliffOp o);
+    void hadamard(VertexIndex v);
+    void phaserot(VertexIndex v);
+    void bitflip(VertexIndex v);
+    void phaseflip(VertexIndex v);
+    void cphase(VertexIndex v1, VertexIndex v2);
+    void cnot(VertexIndex vc, VertexIndex vt);
+    int measure(VertexIndex v, LocCliffOp basis = lco_Z,
+                bool *determined = NULL, int force = -1);
+    Stabilizer &get_full_stabilizer(void) const;
+    void invert_neighborhood(VertexIndex v);
+    void print_adj_list(ostream &os = cout) const;
+    void print_adj_list_line(ostream &os, VertexIndex i) const;
+    void print_stabilizer(ostream &os = cout) const;
+    vector<vector<unsigned long>> adjacency_matrix() const;
+    vector<unordered_set<unsigned long>> adjacency_list() const;
+    vector<string> vop_list() const;
+    vector<string> stabilizer_list() const;
 
-private:
-  void add_edge(VertexIndex v1, VertexIndex v2);
-  void del_edge(VertexIndex v1, VertexIndex v2);
-  void toggle_edge(VertexIndex v1, VertexIndex v2);
-  int graph_Z_measure(VertexIndex v, int force = -1);
-  int graph_Y_measure(VertexIndex v, int force = -1);
-  int graph_X_measure(VertexIndex v, bool *determined = NULL, int force = -1);
-  void toggle_edges(const unordered_set<VertexIndex> vs1,
-                    const unordered_set<VertexIndex> vs2);
-  bool remove_byprod_op(VertexIndex v, VertexIndex use_not);
-  void cphase_with_table(VertexIndex v1, VertexIndex v2);
-  ConnectionInfo getConnectionInfo(VertexIndex v1, VertexIndex v2);
+  private:
+    void add_edge(VertexIndex v1, VertexIndex v2);
+    void del_edge(VertexIndex v1, VertexIndex v2);
+    void toggle_edge(VertexIndex v1, VertexIndex v2);
+    int graph_Z_measure(VertexIndex v, int force = -1);
+    int graph_Y_measure(VertexIndex v, int force = -1);
+    int graph_X_measure(VertexIndex v, bool *determined = NULL, int force = -1);
+    void toggle_edges(const unordered_set<VertexIndex> vs1,
+                      const unordered_set<VertexIndex> vs2);
+    bool remove_byprod_op(VertexIndex v, VertexIndex use_not);
+    void cphase_with_table(VertexIndex v1, VertexIndex v2);
+    ConnectionInfo getConnectionInfo(VertexIndex v1, VertexIndex v2);
 };
 
 #ifndef SWIG
@@ -174,7 +174,7 @@ typedef unordered_set<VertexIndex>::const_iterator VtxIdxIterConst;
 
 /*! Apply the local (i.e. single-qubit) operation o on vertex v. */
 inline void GraphRegister::local_op(VertexIndex v, LocCliffOp o) {
-  vertices[v].byprod = o * vertices[v].byprod;
+    vertices[v].byprod = o * vertices[v].byprod;
 }
 
 /*! Apply a Hadamard gate on vertex v */
