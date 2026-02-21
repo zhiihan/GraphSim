@@ -1,5 +1,4 @@
 import graphsim
-import pytest
 
 
 def test_stabilizers():
@@ -12,7 +11,7 @@ def test_stabilizers():
     gr.CZ(0, 1)
     gr.CZ(0, 2)
 
-    assert gr.stabilizer_list() == ['+XZZ', '+ZXI', '+ZIX']
+    assert gr.stabilizer_list() == ["+XZZ", "+ZXI", "+ZIX"]
 
 
 def test_adjacency_list():
@@ -40,4 +39,9 @@ def test_adjacency_matrix():
     gr.CZ(0, 1)
     gr.CZ(0, 2)
 
-    assert gr.adjacency_matrix() == [[0, 1, 1, 0], [1, 0, 0, 0], [1, 0, 0, 0], [0, 0, 0, 0]]
+    assert gr.adjacency_matrix() == [
+        [0, 1, 1, 0],
+        [1, 0, 0, 0],
+        [1, 0, 0, 0],
+        [0, 0, 0, 0],
+    ]

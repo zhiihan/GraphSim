@@ -1,6 +1,4 @@
 import graphsim
-import random
-import numpy as np
 
 # we need a quantum register with 7 qubits:
 gr = graphsim.GraphRegister(5)
