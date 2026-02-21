@@ -97,7 +97,7 @@ RightMatrix LocCliffOp::get_matrix (void) const
 
 string RightPhase::get_name (void) const
 {
-   const char* names[] = {"  ", " i", " -", "-i"};
+   const char* names[] = {"+", " i", " -", "-i"};
    return string (names[ph & 0x03]);
 }
 

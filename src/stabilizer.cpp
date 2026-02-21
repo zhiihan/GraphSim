@@ -90,9 +90,9 @@ void Stabilizer::conjugate_column (unsigned col, const LocCliffOp trans)
 void Stabilizer::print (ostream &os) const
 {
    for (unsigned i = 0; i < numQubits; i++) {
-      os << rowsigns[i].get_name() << " ";
+      os << rowsigns[i].get_name();
       for (unsigned j = 0; j < numQubits; j++) {
-         os << paulis[i][j].get_name().substr(0,1) << " ";
+         os << paulis[i][j].get_name().substr(0,1);
       }
       os << endl;
    }
