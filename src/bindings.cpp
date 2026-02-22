@@ -115,8 +115,15 @@ PYBIND11_MODULE(_core, m) {
     m.attr("lco_S") = py::cast(lco_S);
 
     py::class_<GraphRegister>(m, "GraphRegister")
-        .def(py::init<VertexIndex, int>(), py::arg("num_qubits"),
-             py::arg("randomize") = -1)
+        .def(py::init([](VertexIndex num_qubits, int randomize) {
+                if (num_qubits == 0) {
+                    throw py::value_error("num_qubits must be greater than 0");
+                }
+                return std::make_unique<GraphRegister>(num_qubits, randomize);
+            }),
+            py::arg("num_qubits"),
+            py::arg("randomize") = -1
+        )
 
         // Edge operations
         // .def("add_edge", &GraphRegister::add_edge)
@@ -130,6 +137,7 @@ PYBIND11_MODULE(_core, m) {
         .def("Z", &GraphRegister::phaseflip)
         .def("CZ", &GraphRegister::cphase)
         .def("CX", &GraphRegister::cnot)
+        .def("VOP", &GraphRegister::local_op)
 
         .def(
             "measure",
