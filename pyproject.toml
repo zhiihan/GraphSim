@@ -1,6 +1,6 @@
 [project]
 name = "graphstatesim"
-version = "0.2.1"
+version = "0.2.2"
 description = "A fast stabilizer simulator using a graph state representation."
 readme = "README.md"
 requires-python = ">=3.12"
@@ -22,6 +22,7 @@ build-backend = "scikit_build_core.build"
 dev = [
     "pytest>=9.0.2",
     "ruff>=0.15.2",
+    "stim>=1.15.0",
 ]
 
 [tool.cibuildwheel]

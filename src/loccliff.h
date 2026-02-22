@@ -50,7 +50,7 @@ struct RightPhase {
     RightPhase(
         unsigned short ph_); //!< takes 0..3 as argument and writes it to ph
 
-    string get_name(void) const; //!< returns " +", " i", " -", or "-i"
+    string get_name(void) const; //!< returns "+", " i", "-", or "-i"
 };
 
 // ----=== RightMatrix ===----
