@@ -86,3 +86,28 @@ def test_vs_stim():
     stab_list = list(map(str, stab_list))
 
     assert gr.stabilizer_list() == stab_list
+
+def test_remove_edge():
+    g = graphsim.GraphRegister(2)
+    g.H(0)
+    g.H(1)
+    g.CZ(0, 1)
+    g.del_edge(0, 1)
+
+    assert g.adjacency_list() == [set(), set()]
+
+def test_add_edge():
+    g = graphsim.GraphRegister(2)
+    g.add_edge(0, 1)
+
+    assert g.adjacency_list() == [{1}, {0}]
+
+def test_toggle_edge():
+    g = graphsim.GraphRegister(2)
+    g.toggle_edge(0, 1)
+    
+    assert g.adjacency_list() == [{1}, {0}]
+
+    g.toggle_edge(0, 1)
+
+    assert g.adjacency_list() == [set(), set()]
