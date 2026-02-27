@@ -32,7 +32,8 @@ docs = [
   "sphinx >=4.0",
   "sphinx-copybutton",
   "sphinx-autodoc-typehints",
-  "sphinx-autobuild"
+  "sphinx-autobuild",
+  "nbsphinx>=0.9.8",
 ]
 
 [tool.cibuildwheel]
