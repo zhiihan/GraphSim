@@ -1,3 +1,5 @@
+<!-- SPHINX-START -->
+
 # GraphSim
 
 This is a modified repository of Simon Anders' library to simulate an important class of quantum circuits which supports pybind11.
@@ -26,7 +28,7 @@ uv pip install dist/*.whl
 
 This code is not actively supported or maintained, but pull requests for minor bug fixes will be accepted.
 
-> This is GraphSim, a library do simulate stabilizer quantum circuits.
+> This is GraphSim, a library to simulate stabilizer quantum circuits.
 >
 > - Author: Simon Anders, sanders@fs.tum.de, University of Innsbruck
 > - Version: v.10 (initial release)
