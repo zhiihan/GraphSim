@@ -18,6 +18,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5 # Official uv installer
+
       - name: Build wheels
         # Using the official action is more robust than "pip install cibuildwheel"
         uses: pypa/cibuildwheel@v2.21.3
