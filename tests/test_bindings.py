@@ -111,3 +111,12 @@ def test_toggle_edge():
     g.toggle_edge(0, 1)
 
     assert g.adjacency_list() == [set(), set()]
+
+def test_force_measurement():
+    g = graphsim.GraphRegister(1)
+    g.H(0)
+    assert g.measure(0, force=0, basis='Z') == 0
+
+    g = graphsim.GraphRegister(1)
+    g.H(0)
+    assert g.measure(0, force=1, basis='Z') == 1
