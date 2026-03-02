@@ -63,18 +63,17 @@ void GraphRegister::toggle_edge(VertexIndex v1, VertexIndex v2) {
 /*! This is useful to print out the stabilizer (or to compare with CHP).
 You can also use print_stabilizer.*/
 Stabilizer &GraphRegister::get_full_stabilizer(void) const {
-    unordered_set<VertexIndex> all_qubits;
-    for (VertexIterConst i = vertices.begin(); i != vertices.end(); i++) {
-        all_qubits.insert(i - vertices.begin());
+
+    vector<VertexIndex> all_qubits;
+    all_qubits.reserve(vertices.size());
+
+    for (VertexIterConst i = vertices.begin(); i != vertices.end(); ++i) {
+        all_qubits.push_back(i - vertices.begin());
     }
     
-    // Sort for deterministic order
-    vector<VertexIndex> sorted_qubits(all_qubits.begin(), all_qubits.end());
-    sort(sorted_qubits.begin(), sorted_qubits.end());
+    sort(all_qubits.begin(), all_qubits.end());
     
-    // Need to convert back to unordered_set or modify Stabilizer constructor
-    unordered_set<VertexIndex> ordered_qubits(sorted_qubits.begin(), sorted_qubits.end());
-    Stabilizer *s = new Stabilizer(*this, ordered_qubits);
+    Stabilizer *s = new Stabilizer(*this, all_qubits);
     return *s;
 }
 
@@ -154,13 +153,15 @@ vector<string> GraphRegister::stabilizer_list() const {
     vector<string> stab_list(n);
 
     for (unsigned i = 0; i < n; i++) {
-        int i_reverse = n - i - 1;
-        stab_list[i_reverse] += full_stabilizer.rowsigns[i].get_name();
+        // Start the string with the phase (+ or -)
+        string row_str = full_stabilizer.rowsigns[i].get_name();
+        
         for (unsigned j = 0; j < n; j++) {
-            int j_reverse = n - j - 1;
-            stab_list[i_reverse] +=
-                full_stabilizer.paulis[i][j_reverse].get_name().substr(0, 1);
+            // Append each Pauli operator (X, Y, Z, or I)
+            // substr(0, 1) ensures we get "X" instead of "lco_X"
+            row_str += full_stabilizer.paulis[i][j].get_name().substr(0, 1);
         }
+        stab_list[i] = row_str;
     }
 
     return stab_list;

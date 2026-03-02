@@ -56,7 +56,7 @@ struct Stabilizer {
     vector<VertexIndex> vtxidx;
     Stabilizer(const VertexIndex numQubits_);
     Stabilizer(const GraphRegister &gr,
-               const std::unordered_set<VertexIndex> &qubits);
+               const std::vector<VertexIndex> &qubits);
     Stabilizer(QState *qs);
     void add_row(unsigned target, unsigned addend);
     void conjugate(unsigned row, unsigned col, const LocCliffOp trans);

@@ -12,18 +12,18 @@ Stabilizer::Stabilizer(const VertexIndex numQubits_)
 }
 
 Stabilizer::Stabilizer(const GraphRegister &gr,
-                       const unordered_set<VertexIndex> &qubits)
+                       const vector<VertexIndex> &qubits)
     : paulis(qubits.size(), vector<LocCliffOp>(qubits.size(), lco_Id)),
       rowsigns(qubits.size()), vtxidx(qubits.size()) {
     numQubits = qubits.size();
     // Build the graph adjacency matrix with Z's and X's in the diagonal
     // and apply the local Clifford unitaries:
     int in = 0;
-    for (VtxIdxIterConst i = qubits.begin(); i != qubits.end(); i++, in++) {
+    for (auto i = qubits.begin(); i != qubits.end(); i++, in++) {
         rowsigns[in] = RightPhase(0);
         vtxidx[in] = *i;
         int jn = 0;
-        for (VtxIdxIterConst j = qubits.begin(); j != qubits.end(); j++, jn++) {
+        for (auto j = qubits.begin(); j != qubits.end(); j++, jn++) {
             if (i == j) {
                 paulis[in][jn] = lco_X;
             } else {
