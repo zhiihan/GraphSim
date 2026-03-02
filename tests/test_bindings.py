@@ -47,9 +47,10 @@ def test_adjacency_matrix():
         [0, 0, 0, 0],
     ]
 
-@pytest.mark.parametrize("id1", ['I', 'X', 'Y', 'Z'])
-@pytest.mark.parametrize("id2", ['A', 'B', 'C', 'D', 'E', 'F'])
-def test_apply_local_op(id1 : str, id2 : str):
+
+@pytest.mark.parametrize("id1", ["I", "X", "Y", "Z"])
+@pytest.mark.parametrize("id2", ["A", "B", "C", "D", "E", "F"])
+def test_apply_local_op(id1: str, id2: str):
     local_op_id = id1 + id2
 
     g = graphsim.GraphRegister(1)
@@ -62,7 +63,7 @@ def test_apply_local_op(id1 : str, id2 : str):
 # Skipping because don't know why cibuildwheel takes so long to install stim
 @pytest.mark.skip
 def test_vs_stim():
-    import stim 
+    import stim
 
     gr = graphsim.GraphRegister(2)
     gr.H(0)
@@ -87,6 +88,7 @@ def test_vs_stim():
 
     assert gr.stabilizer_list() == stab_list
 
+
 def test_remove_edge():
     g = graphsim.GraphRegister(2)
     g.H(0)
@@ -96,27 +98,30 @@ def test_remove_edge():
 
     assert g.adjacency_list() == [set(), set()]
 
+
 def test_add_edge():
     g = graphsim.GraphRegister(2)
     g.add_edge(0, 1)
 
     assert g.adjacency_list() == [{1}, {0}]
 
+
 def test_toggle_edge():
     g = graphsim.GraphRegister(2)
     g.toggle_edge(0, 1)
-    
+
     assert g.adjacency_list() == [{1}, {0}]
 
     g.toggle_edge(0, 1)
 
     assert g.adjacency_list() == [set(), set()]
 
+
 def test_force_measurement():
     g = graphsim.GraphRegister(1)
     g.H(0)
-    assert g.measure(0, force=0, basis='Z') == 0
+    assert g.measure(0, force=0, basis="Z") == 0
 
     g = graphsim.GraphRegister(1)
     g.H(0)
-    assert g.measure(0, force=1, basis='Z') == 1
+    assert g.measure(0, force=1, basis="Z") == 1
