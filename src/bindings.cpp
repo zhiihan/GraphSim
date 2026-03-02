@@ -72,11 +72,7 @@ PYBIND11_MODULE(_core, m) {
             std::complex<float> scale = rm.sqrt2norm ? 1.0f / std::sqrt(2.0f) : 1.0f;
             py::array_t<std::complex<float>> arr({2,2});
 
-            py::array_t<std::complex<float>> arr2({2,2});
-
             auto buf = arr.mutable_unchecked<2>();
-
-            auto buf2 = arr2.mutable_unchecked<2>();
 
             // Global phase: e^{-i*pi/4}
             const std::complex<float> global_phase = {1.0f/std::sqrt(2.0f), -1.0f/std::sqrt(2.0f)};
@@ -84,8 +80,8 @@ PYBIND11_MODULE(_core, m) {
             // Only apply global phase if loc.op == 4 or 7 (See Simon Anders' thesis)
             scale = (self.op == 4 || self.op == 7) ? scale * global_phase : scale;
 
-            for (ssize_t i = 0; i < 2; i++) {
-                for (ssize_t j = 0; j < 2; j++) {
+            for (py::ssize_t i = 0; i < 2; i++) {
+                for (py::ssize_t j = 0; j < 2; j++) {
                     float ampl = rm.ampls[i][j] ? 1.0f : 0.0f;
                     std::complex<float> phase_value;
 

@@ -24,7 +24,7 @@ RNG is not seeded.) */
 GraphRegister::GraphRegister(VertexIndex numQubits, int randomize)
     : vertices(numQubits) {
     if (randomize > -1) {
-        srandom(time(NULL) + randomize);
+        srand(time(NULL) + randomize);
     }
 }
 
