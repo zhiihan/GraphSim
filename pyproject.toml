@@ -1,6 +1,6 @@
 [project]
 name = "graphstatesim"
-version = "0.2.3"
+version = "0.2.4"
 description = "A fast stabilizer simulator using a graph state representation."
 readme = "README.md"
 requires-python = ">=3.12"

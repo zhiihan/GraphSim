@@ -126,9 +126,9 @@ PYBIND11_MODULE(_core, m) {
         )
 
         // Edge operations
-        // .def("add_edge", &GraphRegister::add_edge)
-        // .def("del_edge", &GraphRegister::del_edge)
-        // .def("toggle_edge", &GraphRegister::toggle_edge)
+        .def("add_edge", &GraphRegister::add_edge)
+        .def("del_edge", &GraphRegister::del_edge)
+        .def("toggle_edge", &GraphRegister::toggle_edge)
 
         // Quantum gates
         .def("H", &GraphRegister::hadamard)
@@ -141,13 +141,24 @@ PYBIND11_MODULE(_core, m) {
 
         .def(
             "measure",
-            [](GraphRegister &gr, VertexIndex v) {
-                // call C++ measure with defaults: basis = lco_Z, determined =
-                // nullptr, force = -1
-                int result = gr.measure(v, lco_Z, NULL, -1);
-                return result;
+            [](GraphRegister &gr, VertexIndex v, int force, char basis) {
+                LocCliffOp lco_basis = lco_Z;
+
+                switch (basis){
+                    case 'X':
+                        lco_basis = lco_X; break;
+                    case 'Y':
+                        lco_basis = lco_Y; break;
+                    case 'Z':
+                        lco_basis = lco_Z; break;
+                    default:
+                        throw std::invalid_argument("basis must be 'X', 'Y', or 'Z'");
+                }
+                return gr.measure(v, lco_basis, nullptr, force);
             },
-            py::arg("vertex"))
+                py::arg("vertex"),
+                py::arg("force") = -1,
+                py::arg("basis") = "Z")
 
         // Neighborhood inversion
         .def("invert_neighborhood", &GraphRegister::invert_neighborhood)

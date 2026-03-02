@@ -140,15 +140,15 @@ class GraphRegister {
     void print_adj_list(ostream &os = cout) const;
     void print_adj_list_line(ostream &os, VertexIndex i) const;
     void print_stabilizer(ostream &os = cout) const;
+    void add_edge(VertexIndex v1, VertexIndex v2);
+    void del_edge(VertexIndex v1, VertexIndex v2);
+    void toggle_edge(VertexIndex v1, VertexIndex v2);
     vector<vector<unsigned long>> adjacency_matrix() const;
     vector<unordered_set<unsigned long>> adjacency_list() const;
     vector<string> vop_list() const;
     vector<string> stabilizer_list() const;
 
   private:
-    void add_edge(VertexIndex v1, VertexIndex v2);
-    void del_edge(VertexIndex v1, VertexIndex v2);
-    void toggle_edge(VertexIndex v1, VertexIndex v2);
     int graph_Z_measure(VertexIndex v, int force = -1);
     int graph_Y_measure(VertexIndex v, int force = -1);
     int graph_X_measure(VertexIndex v, bool *determined = NULL, int force = -1);
