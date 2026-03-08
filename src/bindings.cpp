@@ -13,13 +13,15 @@ namespace py = pybind11;
 PYBIND11_MODULE(_core, m) {
     m.doc() = "Pybind11 bindings for GraphRegister";
 
-    py::class_<LocCliffOp>(m, "LocCliffOp")
+    py::class_<LocCliffOp>(m, "LocCliffOp", "Class representing a Local Clifford Operator.")
         .def(py::init<unsigned short>(),
-             py::arg("op"))
+             py::arg("op"),
+             "Construct by its assigned integer.")
 
         .def(py::init<unsigned short, unsigned short>(),
              py::arg("signsymb"),
-             py::arg("permsymb"))
+             py::arg("permsymb"),
+             "Construct from a Pauli (0-3) and permutation (0-5) integers.")
 
         .def(py::init([](const std::string &s) {
             if (s.size() != 2)
@@ -48,23 +50,23 @@ PYBIND11_MODULE(_core, m) {
             }
 
             return LocCliffOp(signsymb, permsymb);
-        }))
+        }), py::arg("s"), "Construct from string representation (e.g. 'IA').")
 
-        .def("get_name", &LocCliffOp::get_name)
+        .def("get_name", &LocCliffOp::get_name, "Get the string representation of the operator.")
 
         .def("conjugate", &LocCliffOp::conjugate,
-             py::arg("trans"))
+             py::arg("trans"), "Conjugate the operator by another Local Clifford Operator.")
 
-        .def("herm_adjoint", &LocCliffOp::herm_adjoint)
+        .def("herm_adjoint", &LocCliffOp::herm_adjoint, "Get the Hermitian adjoint of the operator.")
 
         .def_static("mult_phase",
              &LocCliffOp::mult_phase,
              py::arg("op1"),
              py::arg("op2"))
 
-        .def("isXY", &LocCliffOp::isXY)
+        .def("isXY", &LocCliffOp::isXY, "Check if the operator is X or Y type.")
 
-        .def("is_diagonal", &LocCliffOp::is_diagonal)
+        .def("is_diagonal", &LocCliffOp::is_diagonal, "Check if the operator is diagonal.")
 
         .def("get_matrix", [](const LocCliffOp &self) {
             RightMatrix rm = self.get_matrix();
@@ -96,7 +98,7 @@ PYBIND11_MODULE(_core, m) {
                 }
             }
             return arr;
-        })
+        }, "Get the matrix representation of the operator.")
 
         .def_readwrite("op", &LocCliffOp::op)
 
@@ -110,7 +112,7 @@ PYBIND11_MODULE(_core, m) {
     m.attr("lco_H") = py::cast(lco_H);
     m.attr("lco_S") = py::cast(lco_S);
 
-    py::class_<GraphRegister>(m, "GraphRegister")
+    py::class_<GraphRegister>(m, "GraphRegister", "A quantum register representing a graph state and local Clifford operators.")
         .def(py::init([](VertexIndex num_qubits, int randomize) {
                 if (num_qubits == 0) {
                     throw py::value_error("num_qubits must be greater than 0");
@@ -118,22 +120,23 @@ PYBIND11_MODULE(_core, m) {
                 return std::make_unique<GraphRegister>(num_qubits, randomize);
             }),
             py::arg("num_qubits"),
-            py::arg("randomize") = -1
+            py::arg("randomize") = -1,
+            "Initialize a quantum register with 'num_qubits' qubits."
         )
 
         // Edge operations
-        .def("add_edge", &GraphRegister::add_edge)
-        .def("del_edge", &GraphRegister::del_edge)
-        .def("toggle_edge", &GraphRegister::toggle_edge)
+        .def("add_edge", &GraphRegister::add_edge, "Add an edge between two vertices.")
+        .def("del_edge", &GraphRegister::del_edge, "Delete an edge between two vertices.")
+        .def("toggle_edge", &GraphRegister::toggle_edge, "Toggle an edge between two vertices.")
 
         // Quantum gates
-        .def("H", &GraphRegister::hadamard)
-        .def("S", &GraphRegister::phaserot)
-        .def("X", &GraphRegister::bitflip)
-        .def("Z", &GraphRegister::phaseflip)
-        .def("CZ", &GraphRegister::cphase)
-        .def("CX", &GraphRegister::cnot)
-        .def("VOP", &GraphRegister::local_op)
+        .def("H", &GraphRegister::hadamard, "Apply Hadamard gate to a vertex.")
+        .def("S", &GraphRegister::phaserot, "Apply Phase rotation (S gate) to a vertex.")
+        .def("X", &GraphRegister::bitflip, "Apply Bit flip (X gate) to a vertex.")
+        .def("Z", &GraphRegister::phaseflip, "Apply Phase flip (Z gate) to a vertex.")
+        .def("CZ", &GraphRegister::cphase, "Apply Controlled-Phase (CZ) gate between two vertices.")
+        .def("CX", &GraphRegister::cnot, "Apply Controlled-NOT (CX) gate between control and target vertices.")
+        .def("VOP", &GraphRegister::local_op, "Apply a local Clifford operation to a vertex.")
 
         .def(
             "measure",
@@ -154,19 +157,20 @@ PYBIND11_MODULE(_core, m) {
             },
                 py::arg("vertex"),
                 py::arg("force") = -1,
-                py::arg("basis") = "Z")
+                py::arg("basis") = "Z",
+                "Measure a qubit in the specified basis (X, Y, or Z).")
 
         // Neighborhood inversion
-        .def("invert_neighborhood", &GraphRegister::invert_neighborhood)
+        .def("invert_neighborhood", &GraphRegister::invert_neighborhood, "Invert the neighborhood of a vertex (Local Complementation).")
 
         // Pybindings for exporting the data
-        .def("stabilizer_list", &GraphRegister::stabilizer_list)
+        .def("stabilizer_list", &GraphRegister::stabilizer_list, "Get the list of stabilizer generators.")
 
-        .def("adjacency_matrix", &GraphRegister::adjacency_matrix)
+        .def("adjacency_matrix", &GraphRegister::adjacency_matrix, "Get the adjacency matrix of the graph.")
 
-        .def("adjacency_list", &GraphRegister::adjacency_list)
+        .def("adjacency_list", &GraphRegister::adjacency_list, "Get the adjacency list of the graph.")
 
-        .def("vop_list", &GraphRegister::vop_list)
+        .def("vop_list", &GraphRegister::vop_list, "Get the list of local Clifford operators.")
 
         // Debug
         .def("print_adjacency_list",
@@ -174,7 +178,7 @@ PYBIND11_MODULE(_core, m) {
                  std::ostringstream oss;
                  gr.print_adj_list(oss);
                  return oss.str();
-             })
+             }, "Return the adjacency list as a string.")
         
         .def("__repr__", [](const GraphRegister &gr) {
             std::ostringstream oss;

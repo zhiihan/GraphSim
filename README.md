@@ -1,12 +1,16 @@
 <!-- SPHINX-START -->
 
-# GraphSim
+# GraphStateSim
 
-This is a modified repository of Simon Anders' library to simulate an important class of quantum circuits which supports pybind11.
+This is a modified repository of Simon Anders' library GraphSim, using pybind11. GraphSim is able to simulate an important class of stabilizer circuits via a graph state representation with local clifford operators.
+
+If you find this codebase useful, please cite the original paper [here](https://arxiv.org/abs/quant-ph/0504117).
 
 ## Installation
 
 ### PyPI
+
+Install with pip:
 
 ```
 pip install graphstatesim
@@ -47,6 +51,4 @@ This code is not actively supported or maintained, but pull requests for minor b
 > If you use this paper for scientific work, please cite the paper 
 > referenced above in your publication.
      
-In case of problems, please submit an issue: https://github.com/marcusps/GraphSim/issues
-
-This code is not actively supported or maintained, but pull requests for minor bug fixes will be accepted.
+In case of problems, please submit an issue.
