@@ -30,6 +30,14 @@ then navigate to the `dist/` folder and pip install the wheel.
 uv pip install dist/*.whl
 ```
 
+## Documentation
+
+Documentation regarding the python bindings can be found at:
+
+https://graphsim.readthedocs.io/en/latest/
+
+## License
+
 This code is not actively supported or maintained, but pull requests for minor bug fixes will be accepted.
 
 > This is GraphSim, a library to simulate stabilizer quantum circuits.
