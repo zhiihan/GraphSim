@@ -349,7 +349,7 @@ wheels = [
 
 [[package]]
 name = "graphstatesim"
-version = "0.2.6b1"
+version = "0.2.6"
 source = { editable = "." }
 
 [package.dev-dependencies]
