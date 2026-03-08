@@ -42,7 +42,9 @@ jobs: # <--- CRITICAL: All jobs must be under this key
     needs: [build_wheels]
     runs-on: ubuntu-latest
     # This checks if the workflow was triggered by a release
-    if: github.event_name == 'release' && github.event.action == 'published'
+    if: >-
+      (github.event_name == 'release' && github.event.action == 'published') ||
+      github.event_name == 'workflow_dispatch'
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
