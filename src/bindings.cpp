@@ -11,17 +11,23 @@
 namespace py = pybind11;
 
 PYBIND11_MODULE(_core, m) {
-    m.doc() = "Pybind11 bindings for GraphRegister";
+    m.doc() = "Pybind11 bindings for GraphSim";
 
     py::class_<LocCliffOp>(m, "LocCliffOp", "Class representing a Local Clifford Operator.")
         .def(py::init<unsigned short>(),
-             py::arg("op"),
-             "Construct by its assigned integer.")
+            py::arg("op"),
+            "Construct by its assigned integer.")
 
         .def(py::init<unsigned short, unsigned short>(),
-             py::arg("signsymb"),
-             py::arg("permsymb"),
-             "Construct from a Pauli (0-3) and permutation (0-5) integers.")
+            py::arg("signsymb"),
+            py::arg("permsymb"),
+            R"doc(
+            Construct from Pauli and permutation integers.
+
+            Args:
+                signsymb (int): A Pauli integer representing "I", "X", "Y" or "Z" in the range [0, 3].
+                permsymb (int): A permutation integer in the range [0, 5].
+            )doc")
 
         .def(py::init([](const std::string &s) {
             if (s.size() != 2)

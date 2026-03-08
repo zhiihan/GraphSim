@@ -1,4 +1,4 @@
-API Reference
+graphsim package
 ================
 
 .. automodule:: graphsim

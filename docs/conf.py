@@ -29,6 +29,10 @@ exclude_patterns = [
     ".venv",
 ]
 
+autoclass_content = 'both' 
+
+autodoc_member_order = 'bysource'
+
 html_theme = "furo"
 
 html_theme_options: dict[str, Any] = {
