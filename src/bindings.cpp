@@ -60,15 +60,26 @@ PYBIND11_MODULE(_core, m) {
 
         .def("get_name", &LocCliffOp::get_name, "Get the string representation of the operator.")
 
-        .def("conjugate", &LocCliffOp::conjugate,
-             py::arg("trans"), "Conjugate the operator by another Local Clifford Operator.")
+        .def("conjugate", 
+            [](const LocCliffOp &self, const LocCliffOp &other) { 
+                RightPhase rp = const_cast<LocCliffOp&>(self).conjugate(other);
+                return rp.get_name();
+            }, 
+            py::arg("other"),
+            "Conjugate the operator by another Local Clifford Operator."
+        )
 
         .def("herm_adjoint", &LocCliffOp::herm_adjoint, "Get the Hermitian adjoint of the operator.")
 
-        .def_static("mult_phase",
-             &LocCliffOp::mult_phase,
-             py::arg("op1"),
-             py::arg("op2"))
+        .def_static("mult_phase", 
+            [](const LocCliffOp &op1, const LocCliffOp &op2) { 
+                RightPhase rp = const_cast<LocCliffOp&>(op1).conjugate(op2);
+                return rp.get_name();
+            }, 
+            py::arg("op1"), 
+            py::arg("op2"), 
+            "Static method to multiply/conjugate two operators and return the phase name."
+        )
 
         .def("isXY", &LocCliffOp::isXY, "Check if the operator is X or Y type.")
 
