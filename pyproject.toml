@@ -36,6 +36,24 @@ docs = [
   "nbsphinx>=0.9.8",
 ]
 
+[tool.pytest]
+minversion = "9.0"
+addopts = ["-ra", "--showlocals"]
+strict = true
+filterwarnings = ["error"]
+log_level = "INFO"
+testpaths = [
+  "tests",
+]
+
+[tool.ruff.lint]
+extend-select = [
+  "B",      # flake8-bugbear
+  "I",      # isort
+  "RUF",    # Ruff-specific
+  "UP",     # pyupgrade
+]
+
 [tool.cibuildwheel]
 build-frontend = "build[uv]"
 build = "cp312-* cp313-*"
