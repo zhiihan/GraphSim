@@ -27,7 +27,7 @@ jobs: # <--- CRITICAL: All jobs must be under this key
         uses: astral-sh/setup-uv@v7
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v3.4.0
+        uses: pypa/cibuildwheel@v3.4.1
         env:
           CIBW_ENVIRONMENT_WINDOWS: "UV_LINK_MODE=copy TMPDIR='C:\\temp' TEMP='C:\\temp' TMP='C:\\temp'"
           CIBW_BUILD: "cp310-* cp311-* cp312-*"
