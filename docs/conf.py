@@ -29,9 +29,9 @@ exclude_patterns = [
     ".venv",
 ]
 
-autoclass_content = 'both' 
+autoclass_content = "both"
 
-autodoc_member_order = 'bysource'
+autodoc_member_order = "bysource"
 
 html_theme = "furo"
 

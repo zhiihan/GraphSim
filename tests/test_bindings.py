@@ -171,3 +171,20 @@ def test_force_measurement():
     g = graphsim.GraphRegister(1)
     g.H(0)
     assert g.measure(0, force=1, basis="Z") == 1
+
+
+@pytest.mark.parametrize(
+    "gatename",
+    [
+        ("X", (2,)),
+        ("Z", (2,)),
+        ("S", (2,)),
+        ("H", (2,)),
+        ("CX", (2, 3)),
+        ("CZ", (2, 3)),
+    ],
+)
+def test_out_of_bounds(gatename: tuple[str, tuple[int]]):
+    g = graphsim.GraphRegister(2)
+    with pytest.raises(IndexError):
+        getattr(g, gatename[0])(*gatename[1])

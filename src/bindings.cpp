@@ -142,22 +142,58 @@ PYBIND11_MODULE(_core, m) {
         )
 
         // Edge operations
-        .def("add_edge", &GraphRegister::add_edge, "Add an edge between two vertices.")
-        .def("del_edge", &GraphRegister::del_edge, "Delete an edge between two vertices.")
-        .def("toggle_edge", &GraphRegister::toggle_edge, "Toggle an edge between two vertices.")
+        .def("add_edge", [](GraphRegister &gr, VertexIndex v1, VertexIndex v2) {
+            if (v1 >= gr.vertices.size() || v2 >= gr.vertices.size())
+                throw py::index_error("Vertex index out of range");
+            gr.add_edge(v1, v2);
+        }, "Add an edge between two vertices.")
+        .def("del_edge", [](GraphRegister &gr, VertexIndex v1, VertexIndex v2) {
+            if (v1 >= gr.vertices.size() || v2 >= gr.vertices.size())
+                throw py::index_error("Vertex index out of range");
+            gr.del_edge(v1, v2);
+        }, "Delete an edge between two vertices.")
+        .def("toggle_edge", [](GraphRegister &gr, VertexIndex v1, VertexIndex v2) {
+            if (v1 >= gr.vertices.size() || v2 >= gr.vertices.size())
+                throw py::index_error("Vertex index out of range");
+            gr.toggle_edge(v1, v2);
+        }, "Toggle an edge between two vertices.")
 
         // Quantum gates
-        .def("H", &GraphRegister::hadamard, "Apply Hadamard gate to a vertex.")
-        .def("S", &GraphRegister::phaserot, "Apply Phase rotation (S gate) to a vertex.")
-        .def("X", &GraphRegister::bitflip, "Apply Bit flip (X gate) to a vertex.")
-        .def("Z", &GraphRegister::phaseflip, "Apply Phase flip (Z gate) to a vertex.")
-        .def("CZ", &GraphRegister::cphase, "Apply Controlled-Phase (CZ) gate between two vertices.")
-        .def("CX", &GraphRegister::cnot, "Apply Controlled-NOT (CX) gate between control and target vertices.")
-        .def("VOP", &GraphRegister::local_op, "Apply a local Clifford operation to a vertex.")
+        .def("H", [](GraphRegister &gr, VertexIndex v) {
+            if (v >= gr.vertices.size()) throw py::index_error("Vertex index out of range");
+            gr.hadamard(v);
+        }, "Apply Hadamard gate to a vertex.")
+        .def("S", [](GraphRegister &gr, VertexIndex v) {
+            if (v >= gr.vertices.size()) throw py::index_error("Vertex index out of range");
+            gr.phaserot(v);
+        }, "Apply Phase rotation (S gate) to a vertex.")
+        .def("X", [](GraphRegister &gr, VertexIndex v) {
+            if (v >= gr.vertices.size()) throw py::index_error("Vertex index out of range");
+            gr.bitflip(v);
+        }, "Apply Bit flip (X gate) to a vertex.")
+        .def("Z", [](GraphRegister &gr, VertexIndex v) {
+            if (v >= gr.vertices.size()) throw py::index_error("Vertex index out of range");
+            gr.phaseflip(v);
+        }, "Apply Phase flip (Z gate) to a vertex.")
+        .def("CZ", [](GraphRegister &gr, VertexIndex v1, VertexIndex v2) {
+            if (v1 >= gr.vertices.size() || v2 >= gr.vertices.size())
+                throw py::index_error("Vertex index out of range");
+            gr.cphase(v1, v2);
+        }, "Apply Controlled-Phase (CZ) gate between two vertices.")
+        .def("CX", [](GraphRegister &gr, VertexIndex vc, VertexIndex vt) {
+            if (vc >= gr.vertices.size() || vt >= gr.vertices.size())
+                throw py::index_error("Vertex index out of range");
+            gr.cnot(vc, vt);
+        }, "Apply Controlled-NOT (CX) gate between control and target vertices.")
+        .def("VOP", [](GraphRegister &gr, VertexIndex v, LocCliffOp o) {
+            if (v >= gr.vertices.size()) throw py::index_error("Vertex index out of range");
+            gr.local_op(v, o);
+        }, "Apply a local Clifford operation to a vertex.")
 
         .def(
             "measure",
             [](GraphRegister &gr, VertexIndex v, int force, char basis) {
+                if (v >= gr.vertices.size()) throw py::index_error("Vertex index out of range");
                 LocCliffOp lco_basis = lco_Z;
 
                 switch (basis){
@@ -178,7 +214,10 @@ PYBIND11_MODULE(_core, m) {
                 "Measure a qubit in the specified basis (X, Y, or Z).")
 
         // Neighborhood inversion
-        .def("invert_neighborhood", &GraphRegister::invert_neighborhood, "Invert the neighborhood of a vertex (Local Complementation).")
+        .def("invert_neighborhood", [](GraphRegister &gr, VertexIndex v) {
+            if (v >= gr.vertices.size()) throw py::index_error("Vertex index out of range");
+            gr.invert_neighborhood(v);
+        }, "Invert the neighborhood of a vertex (Local Complementation).")
 
         // Pybindings for exporting the data
         .def("stabilizer_list", &GraphRegister::stabilizer_list, "Get the list of stabilizer generators.")
