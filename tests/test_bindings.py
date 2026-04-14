@@ -88,12 +88,12 @@ def test_adjacency_matrix():
     gr.CZ(0, 1)
     gr.CZ(0, 2)
 
-    assert gr.adjacency_matrix() == [
+    assert np.allclose(gr.adjacency_matrix(), np.array([
         [0, 1, 1, 0],
         [1, 0, 0, 0],
         [1, 0, 0, 0],
         [0, 0, 0, 0],
-    ]
+    ]))
 
 
 @pytest.mark.parametrize("id1", ["I", "X", "Y", "Z"])
