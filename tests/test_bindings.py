@@ -1,3 +1,5 @@
+import struct
+import numpy as np
 import graphsim
 import pytest
 
@@ -189,3 +191,27 @@ def test_out_of_bounds(gatename: tuple[str, tuple[int]]):
     with pytest.raises(IndexError) as e:
         getattr(g, gatename[0])(*gatename[1])
     assert e.type is IndexError
+
+def test_merge():
+    a = graphsim.GraphRegister(5)
+    a.H(0)
+    a.H(1)
+    a.H(2)
+    a.CZ(0, 1)
+    a.CZ(0, 2)
+    a.add_edge(0, 1)
+    a.add_edge(0, 2)
+
+    b = graphsim.GraphRegister(3)
+    b.add_edge(0, 1)
+    b.S(0)
+    b.S(0)
+    b.S(2)
+    
+    c = a + b # a.merge(b)
+
+    assert np.allclose(b.adjacency_matrix(), c.adjacency_matrix()[-len(b):, -len(b):])
+    assert b.stabilizer_list() == [sign[0]+p[-len(b):] for p, sign in zip(c.stabilizer_list()[-len(b):], b.stabilizer_list(), strict=True)]
+    
+    assert np.allclose(a.adjacency_matrix(), c.adjacency_matrix()[:len(a), :len(a)])
+    assert a.stabilizer_list() == [p[:len(a)+1] for p in c.stabilizer_list()[:len(a)]]

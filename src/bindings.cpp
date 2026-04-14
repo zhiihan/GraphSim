@@ -141,6 +141,20 @@ PYBIND11_MODULE(_core, m) {
             "Initialize a quantum register with 'num_qubits' qubits."
         )
 
+        .def("merge", &GraphRegister::merge,
+             py::arg("other"),
+             "Merge another GraphRegister with this one, returning a new combined register.")
+
+        .def("__add__", &GraphRegister::merge, 
+             py::arg("other"),
+             "Syntactic sugar for merge: reg1 + reg2.")
+
+        .def("num_qubits", &GraphRegister::num_qubits, 
+             "Get the number of qubits in the register.")
+
+        .def("__len__", &GraphRegister::num_qubits, 
+             "Return the number of qubits in the register.")
+
         // Edge operations
         .def("add_edge", [](GraphRegister &gr, VertexIndex v1, VertexIndex v2) {
             if (v1 >= gr.vertices.size() || v2 >= gr.vertices.size())
@@ -222,7 +236,18 @@ PYBIND11_MODULE(_core, m) {
         // Pybindings for exporting the data
         .def("stabilizer_list", &GraphRegister::stabilizer_list, "Get the list of stabilizer generators.")
 
-        .def("adjacency_matrix", &GraphRegister::adjacency_matrix, "Get the adjacency matrix of the graph.")
+        .def("adjacency_matrix", [](const GraphRegister &gr) {
+            auto mat = gr.adjacency_matrix();
+            size_t n = mat.size();
+            py::array_t<uint8_t> arr({n, n});
+            auto buf = arr.mutable_unchecked<2>();
+            for (size_t i = 0; i < n; i++) {
+                for (size_t j = 0; j < n; j++) {
+                    buf(i, j) = static_cast<uint8_t>(mat[i][j]);
+                }
+            }
+            return arr;
+        }, "Get the adjacency matrix of the graph as a NumPy array (entries are 0 or 1).")
 
         .def("adjacency_list", &GraphRegister::adjacency_list, "Get the adjacency list of the graph.")
 

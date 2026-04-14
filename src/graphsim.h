@@ -124,8 +124,10 @@ class GraphRegister {
     The index of the vector is usually taken as of type VertexIndex. */
     vector<QubitVertex> vertices;
     GraphRegister(VertexIndex numQubits, int randomize = -1);
-    GraphRegister(GraphRegister &gr);
+    GraphRegister(const GraphRegister &gr);
     ~GraphRegister(){};
+    GraphRegister merge(const GraphRegister &other) const;
+    VertexIndex num_qubits() const;
     void local_op(VertexIndex v, LocCliffOp o);
     void hadamard(VertexIndex v);
     void phaserot(VertexIndex v);

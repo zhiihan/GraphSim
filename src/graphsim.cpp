@@ -30,7 +30,28 @@ GraphRegister::GraphRegister(VertexIndex numQubits, int randomize)
 
 //! Copy constructor
 /*! Clones a register */
-GraphRegister::GraphRegister(GraphRegister &gr) : vertices(gr.vertices) {}
+GraphRegister::GraphRegister(const GraphRegister &gr) : vertices(gr.vertices) {}
+
+//! Merge another quantum register with this one, returning a new combined register.
+GraphRegister GraphRegister::merge(const GraphRegister &other) const {
+    GraphRegister result(*this);
+    VertexIndex offset = result.vertices.size();
+    result.vertices.reserve(offset + other.vertices.size());
+    for (const auto &v : other.vertices) {
+        result.vertices.emplace_back();
+        QubitVertex &new_v = result.vertices.back();
+        new_v.byprod = v.byprod;
+        for (VertexIndex neighbor : v.neighbors) {
+            new_v.neighbors.insert(neighbor + offset);
+        }
+    }
+    return result;
+}
+
+//! Returns the number of qubits in the register.
+VertexIndex GraphRegister::num_qubits() const {
+    return vertices.size();
+}
 
 //! Add an edge to the graph underlying the state.
 void GraphRegister::add_edge(VertexIndex v1, VertexIndex v2) {
