@@ -186,5 +186,6 @@ def test_force_measurement():
 )
 def test_out_of_bounds(gatename: tuple[str, tuple[int]]):
     g = graphsim.GraphRegister(2)
-    with pytest.raises(IndexError):
+    with pytest.raises(IndexError) as e:
         getattr(g, gatename[0])(*gatename[1])
+    assert e.type is IndexError
