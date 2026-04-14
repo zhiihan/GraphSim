@@ -213,4 +213,4 @@ def test_merge():
     assert b.stabilizer_list() == [sign[0]+p[-len(b):] for p, sign in zip(c.stabilizer_list()[-len(b):], b.stabilizer_list(), strict=True)]
     
     assert np.allclose(a.adjacency_matrix(), c.adjacency_matrix()[:len(a), :len(a)])
-    assert a.stabilizer_list() == [p[:len(a)+1] for p in c.stabilizer_list()[:len(a)]]
+    assert a.stabilizer_list() == [p[:len(a)+1] for p in c.stabilizer_list()[:len(a)]] # These are different because there is a sign, e.g. '+IXX'
