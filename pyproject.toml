@@ -4,7 +4,9 @@ version = "0.2.8"
 description = "A fast stabilizer simulator using a graph state representation."
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "numpy>=2.4.2",
+]
 
 [tool.scikit-build]
 minimum-version = "build-system.requires"
