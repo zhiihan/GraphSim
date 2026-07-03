@@ -177,11 +177,9 @@ def test_force_measurement():
 @pytest.mark.parametrize(
     "opname",
     [
-        ("add_edge", (2, 3)),
-        ("del_edge", (2, 3)),
-        ("toggle_edge", (2, 3)),
         ("measure", (2,)),
         ("invert_neighborhood", (2,)),
+        ("local_complementation", (2,)),
     ],
 )
 def test_out_of_bounds(opname: tuple[str, tuple[int]]):
@@ -189,6 +187,22 @@ def test_out_of_bounds(opname: tuple[str, tuple[int]]):
     with pytest.raises(IndexError) as e:
         getattr(g, opname[0])(*opname[1])
     assert e.type is IndexError
+
+def test_auto_expand_edges():
+    g = graphsim.GraphRegister(2)
+    g.add_edge(2, 4)
+    assert len(g) == 5
+    assert g.adjacency_list() == [set(), set(), {4}, set(), {2}]
+
+    g = graphsim.GraphRegister(2)
+    g.del_edge(2, 4)
+    assert len(g) == 5
+    assert g.adjacency_list() == [set(), set(), set(), set(), set()]
+
+    g = graphsim.GraphRegister(2)
+    g.toggle_edge(2, 4)
+    assert len(g) == 5
+    assert g.adjacency_list() == [set(), set(), {4}, set(), {2}]
 
 def test_default_constructor():
     g = graphsim.GraphRegister()

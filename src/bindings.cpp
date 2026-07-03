@@ -153,21 +153,9 @@ PYBIND11_MODULE(_core, m) {
              "Return the number of qubits in the register.")
 
         // Edge operations
-        .def("add_edge", [](GraphRegister &gr, VertexIndex v1, VertexIndex v2) {
-            if (v1 >= gr.vertices.size() || v2 >= gr.vertices.size())
-                throw py::index_error("Vertex index out of range");
-            gr.add_edge(v1, v2);
-        }, "Add an edge between two vertices.")
-        .def("del_edge", [](GraphRegister &gr, VertexIndex v1, VertexIndex v2) {
-            if (v1 >= gr.vertices.size() || v2 >= gr.vertices.size())
-                throw py::index_error("Vertex index out of range");
-            gr.del_edge(v1, v2);
-        }, "Delete an edge between two vertices.")
-        .def("toggle_edge", [](GraphRegister &gr, VertexIndex v1, VertexIndex v2) {
-            if (v1 >= gr.vertices.size() || v2 >= gr.vertices.size())
-                throw py::index_error("Vertex index out of range");
-            gr.toggle_edge(v1, v2);
-        }, "Toggle an edge between two vertices.")
+        .def("add_edge", &GraphRegister::add_edge, "Add an edge between two vertices.")
+        .def("del_edge", &GraphRegister::del_edge, "Delete an edge between two vertices.")
+        .def("toggle_edge", &GraphRegister::toggle_edge, "Toggle an edge between two vertices.")
 
         // Quantum gates
         .def("H", &GraphRegister::hadamard, "Apply Hadamard gate to a vertex.")

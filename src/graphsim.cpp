@@ -56,6 +56,12 @@ VertexIndex GraphRegister::num_qubits() const {
 //! Add an edge to the graph underlying the state.
 void GraphRegister::add_edge(VertexIndex v1, VertexIndex v2) {
     assert(v1 != v2);
+    if (v1 >= vertices.size() || v2 >= vertices.size()) {
+        VertexIndex max_v = std::max(v1, v2);
+        VertexIndex required = max_v + 1;
+        GraphRegister temp(required - vertices.size());
+        *this = this->merge(temp);
+    }
     vertices[v1].neighbors.insert(v2);
     vertices[v2].neighbors.insert(v1);
     // D cerr << "adding edge " << v1 << " - " << v2 << endl;
@@ -64,6 +70,12 @@ void GraphRegister::add_edge(VertexIndex v1, VertexIndex v2) {
 //! Delete an edge to the graph underlying the state.
 void GraphRegister::del_edge(VertexIndex v1, VertexIndex v2) {
     DBGOUT("deling edge " << v1 << " - " << v2 << endl);
+    if (v1 >= vertices.size() || v2 >= vertices.size()) {
+        VertexIndex max_v = std::max(v1, v2);
+        VertexIndex required = max_v + 1;
+        GraphRegister temp(required - vertices.size());
+        *this = this->merge(temp);
+    }
     vertices[v1].neighbors.erase(v2);
     vertices[v2].neighbors.erase(v1);
 }
@@ -71,6 +83,12 @@ void GraphRegister::del_edge(VertexIndex v1, VertexIndex v2) {
 //! Toggle an edge to the graph underlying the state.
 /*! (i.e. add it if not present, and delete it if present.) */
 void GraphRegister::toggle_edge(VertexIndex v1, VertexIndex v2) {
+    if (v1 >= vertices.size() || v2 >= vertices.size()) {
+        VertexIndex max_v = std::max(v1, v2);
+        VertexIndex required = max_v + 1;
+        GraphRegister temp(required - vertices.size());
+        *this = this->merge(temp);
+    }
     int n1 = vertices[v1].neighbors.erase(v2);
     if (n1 == 1) {
         vertices[v2].neighbors.erase(v1);
