@@ -131,9 +131,6 @@ PYBIND11_MODULE(_core, m) {
 
     py::class_<GraphRegister>(m, "GraphRegister", "A quantum register representing a graph state and local Clifford operators.")
         .def(py::init([](VertexIndex num_qubits, int randomize) {
-                if (num_qubits == 0) {
-                    throw py::value_error("num_qubits must be greater than 0");
-                }
                 return std::make_unique<GraphRegister>(num_qubits, randomize);
             }),
             py::arg("num_qubits"),

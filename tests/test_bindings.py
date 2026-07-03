@@ -214,3 +214,28 @@ def test_merge():
     
     assert np.allclose(a.adjacency_matrix(), c.adjacency_matrix()[:len(a), :len(a)])
     assert a.stabilizer_list() == [p[:len(a)+1] for p in c.stabilizer_list()[:len(a)]] # These are different because there is a sign, e.g. '+IXX'
+
+
+def test_zero_size_register():
+    gr = graphsim.GraphRegister(0)
+    assert len(gr) == 0
+    assert gr.num_qubits() == 0
+    assert gr.stabilizer_list() == []
+    assert gr.adjacency_list() == []
+    assert gr.vop_list() == []
+    assert gr.adjacency_matrix().shape == (0, 0)
+    
+    # Check that merge works
+    gr2 = graphsim.GraphRegister(2)
+    merged = gr + gr2
+    assert len(merged) == 2
+    
+    merged2 = gr2 + gr
+    assert len(merged2) == 2
+
+def test_negative_size_register():
+    with pytest.raises(TypeError):
+        graphsim.GraphRegister(-1)
+    
+    with pytest.raises(TypeError):
+        graphsim.GraphRegister(2.5)
