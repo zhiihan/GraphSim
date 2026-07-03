@@ -252,6 +252,12 @@ ConnectionInfo GraphRegister::getConnectionInfo(VertexIndex v1,
 
 //! Do a conditional phase gate between the two qubits.
 void GraphRegister::cphase(VertexIndex v1, VertexIndex v2) {
+    if (v1 >= vertices.size() || v2 >= vertices.size()) {
+        VertexIndex max_v = std::max(v1, v2);
+        VertexIndex required = max_v + 1;
+        GraphRegister temp(required - vertices.size());
+        *this = this->merge(temp);
+    }
 // If there are non-operand neighbors, we can use neighborhood inversion
 // to remove the byprod operators.
 // These will store whether the operand vertices have nonoperand neighbors.
@@ -282,6 +288,12 @@ void GraphRegister::cphase(VertexIndex v1, VertexIndex v2) {
 
 //! Do a controlled not gate between the vertices vc (control) and vt (target).
 void GraphRegister::cnot(VertexIndex vc, VertexIndex vt) {
+    if (vc >= vertices.size() || vt >= vertices.size()) {
+        VertexIndex max_v = std::max(vc, vt);
+        VertexIndex required = max_v + 1;
+        GraphRegister temp(required - vertices.size());
+        *this = this->merge(temp);
+    }
     hadamard(vt);
     cphase(vc, vt);
     hadamard(vt);
@@ -537,6 +549,18 @@ void GraphRegister::invert_neighborhood(VertexIndex v) {
     }
     // finally, adjust the local Clifford of v:
     vertices[v].byprod = vertices[v].byprod * lco_smiX.herm_adjoint();
+}
+
+//! Do local complementation about vertex v, only changing the edges (not local Cliffords).
+void GraphRegister::local_complementation(VertexIndex v) {
+    unordered_set<VertexIndex> vn = vertices[v].neighbors;
+    for (VtxIdxIter i = vn.begin(); i != vn.end(); i++) {
+        for (VtxIdxIter j = i; j != vn.end(); j++) {
+            if (*i != *j) {
+                toggle_edge(*i, *j);
+            }
+        }
+    }
 }
 
 //! Do neighborhood inversions to reduce the VOp of vertex v to the identity.

@@ -175,21 +175,45 @@ def test_force_measurement():
 
 
 @pytest.mark.parametrize(
-    "gatename",
+    "opname",
     [
-        ("X", (2,)),
-        ("Z", (2,)),
-        ("S", (2,)),
-        ("H", (2,)),
-        ("CX", (2, 3)),
-        ("CZ", (2, 3)),
+        ("add_edge", (2, 3)),
+        ("del_edge", (2, 3)),
+        ("toggle_edge", (2, 3)),
+        ("measure", (2,)),
+        ("invert_neighborhood", (2,)),
     ],
 )
-def test_out_of_bounds(gatename: tuple[str, tuple[int]]):
+def test_out_of_bounds(opname: tuple[str, tuple[int]]):
     g = graphsim.GraphRegister(2)
     with pytest.raises(IndexError) as e:
-        getattr(g, gatename[0])(*gatename[1])
+        getattr(g, opname[0])(*opname[1])
     assert e.type is IndexError
+
+def test_default_constructor():
+    g = graphsim.GraphRegister()
+    assert len(g) == 0
+    assert g.num_qubits() == 0
+
+def test_auto_expand_gates():
+    g = graphsim.GraphRegister()
+    g.H(3)
+    assert len(g) == 4
+    assert g.vop_list()[3] == "IA" # H * H = I (Since QubitVertex initializes with H, H on 3 changes its VOP to H*H = I, i.e., "IA")
+
+    g = graphsim.GraphRegister(2)
+    g.CZ(2, 5)
+    assert len(g) == 6
+
+    g = graphsim.GraphRegister(2)
+    g.CX(5, 1)
+    assert len(g) == 6
+
+    g = graphsim.GraphRegister(2)
+    g.H(4)
+    g.VOP(4, graphsim.LocCliffOp("XA"))
+    assert g.vop_list()[4] == "XA"
+    assert len(g) == 5
 
 def test_merge():
     a = graphsim.GraphRegister(5)
@@ -239,3 +263,38 @@ def test_negative_size_register():
     
     with pytest.raises(TypeError):
         graphsim.GraphRegister(2.5)
+
+def test_local_complementation_only_edges():
+    # Setup a state 1 - 0 - 2
+    g = graphsim.GraphRegister(3)
+    g.H(0)
+    g.H(1)
+    g.H(2)
+    g.CZ(0, 1)
+    g.CZ(0, 2)
+    
+    # Save the original VOPs
+    original_vops = g.vop_list()
+    
+    # Perform local complementation on 0
+    g.local_complementation(0)
+    
+    # Check edges: 1 and 2 should now be connected
+    assert g.adjacency_list() == [{1, 2}, {0, 2}, {0, 1}]
+    
+    # Check VOPs: should be unchanged
+    assert g.vop_list() == original_vops
+    
+    # Compare with invert_neighborhood (which adjusts VOPs)
+    g2 = graphsim.GraphRegister(3)
+    g2.H(0)
+    g2.H(1)
+    g2.H(2)
+    g2.CZ(0, 1)
+    g2.CZ(0, 2)
+    g2.invert_neighborhood(0)
+    
+    # Adjacencies should be the same
+    assert g2.adjacency_list() == g.adjacency_list()
+    # VOPs should be different (adjusted)
+    assert g2.vop_list() != original_vops

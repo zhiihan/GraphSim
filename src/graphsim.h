@@ -123,7 +123,7 @@ class GraphRegister {
     /*! This vector stores all the qubits, represented as QubitVertex objects.
     The index of the vector is usually taken as of type VertexIndex. */
     vector<QubitVertex> vertices;
-    GraphRegister(VertexIndex numQubits, int randomize = -1);
+    GraphRegister(VertexIndex numQubits = 0, int randomize = -1);
     GraphRegister(const GraphRegister &gr);
     ~GraphRegister(){};
     GraphRegister merge(const GraphRegister &other) const;
@@ -139,6 +139,7 @@ class GraphRegister {
                 bool *determined = NULL, int force = -1);
     Stabilizer &get_full_stabilizer(void) const;
     void invert_neighborhood(VertexIndex v);
+    void local_complementation(VertexIndex v);
     void print_adj_list(ostream &os = cout) const;
     void print_adj_list_line(ostream &os, VertexIndex i) const;
     void print_stabilizer(ostream &os = cout) const;
@@ -176,6 +177,11 @@ typedef unordered_set<VertexIndex>::const_iterator VtxIdxIterConst;
 
 /*! Apply the local (i.e. single-qubit) operation o on vertex v. */
 inline void GraphRegister::local_op(VertexIndex v, LocCliffOp o) {
+    if (v >= vertices.size()) {
+        VertexIndex required = v + 1;
+        GraphRegister temp(required - vertices.size());
+        *this = this->merge(temp);
+    }
     vertices[v].byprod = o * vertices[v].byprod;
 }
 
