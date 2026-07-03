@@ -129,6 +129,7 @@ class GraphRegister {
     GraphRegister merge(const GraphRegister &other) const;
     VertexIndex num_qubits() const;
     void local_op(VertexIndex v, LocCliffOp o);
+    void identity(VertexIndex v);
     void hadamard(VertexIndex v);
     void phaserot(VertexIndex v);
     void bitflip(VertexIndex v);
@@ -197,6 +198,9 @@ inline void GraphRegister::bitflip(VertexIndex v) { local_op(v, lco_X); }
 
 /*! Apply a phaseflip gate (i.e. a Pauli Z) on vertex v */
 inline void GraphRegister::phaseflip(VertexIndex v) { local_op(v, lco_Z); }
+
+/*! Apply an identity gate on vertex v */
+inline void GraphRegister::identity(VertexIndex v) { local_op(v, lco_Id); }
 
 #endif // SWIG
 

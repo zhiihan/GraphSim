@@ -164,6 +164,9 @@ PYBIND11_MODULE(_core, m) {
         .def("Z", &GraphRegister::phaseflip, "Apply Phase flip (Z gate) to a vertex.")
         .def("CZ", &GraphRegister::cphase, "Apply Controlled-Phase (CZ) gate between two vertices.")
         .def("CX", &GraphRegister::cnot, "Apply Controlled-NOT (CX) gate between control and target vertices.")
+        .def("I", &GraphRegister::identity, "Apply Identity gate to a vertex (no-op, but resizes the register if out of bounds).")
+        .def("Id", &GraphRegister::identity, "Apply Identity gate to a vertex (no-op, but resizes the register if out of bounds).")
+        .def("identity", &GraphRegister::identity, "Apply Identity gate to a vertex (no-op, but resizes the register if out of bounds).")
         .def("VOP", &GraphRegister::local_op, "Apply a local Clifford operation to a vertex.")
 
         .def(

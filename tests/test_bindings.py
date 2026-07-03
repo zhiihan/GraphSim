@@ -312,3 +312,8 @@ def test_local_complementation_only_edges():
     assert g2.adjacency_list() == g.adjacency_list()
     # VOPs should be different (adjusted)
     assert g2.vop_list() != original_vops
+
+def test_identity_gate():
+    g = graphsim.GraphRegister(2)
+    g.I(4)
+    assert len(g) == 5
